@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZION_COMMAND_CENTER_V4_EXTENDED</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --m-green: #00FF41;
+      --m-dark: #001a00;
+      --neon-glow: 0 0 15px rgba(0, 255, 65, 0.4);
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: var(--m-green);
+      font-family: 'Fira Code', monospace;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar Estilo Matrix */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #003300;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--m-green);
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0.15;
+    }
+
+    .monitor-screen {
+      background: radial-gradient(circle, rgba(0, 40, 0, 0.2) 0%, rgba(0, 0, 0, 1) 100%);
+      border: 2px solid #111;
+      border-top: 2px solid #333;
+      box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.1), 0 5px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+    }
+
+    .monitor-screen::before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 3px 100%;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .neon-active {
+      border: 2px solid #fff !important;
+      box-shadow: 0 0 20px #00FF41, inset 0 0 10px #00FF41 !important;
+      animation: borderRotate 1s infinite alternate;
+    }
+
+    @keyframes borderRotate {
+      from {
+        filter: hue-rotate(0deg);
+      }
+
+      to {
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    #rabbit {
+      position: fixed;
+      bottom: 20px;
+      left: -100px;
+      font-size: 3rem;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    @keyframes rabbitRun {
+      0% {
+        left: -100px;
+      }
+
+      100% {
+        left: 110vw;
+      }
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding-bottom: 60px;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn-link {
+      border: 1px solid var(--m-green);
+      background: rgba(0, 255, 65, 0.05);
+      transition: 0.3s;
+      text-shadow: 0 0 5px var(--m-green);
+      z-index: 10;
+    }
+
+    .btn-link:hover {
+      background: var(--m-green);
+      color: #000;
+      box-shadow: 0 0 20px var(--m-green);
+    }
+
+    .melt-effect {
+      animation: melt 2s forwards;
+    }
+
+    @keyframes melt {
+      to {
+        transform: translateY(100vh) rotate(10deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="p-4 flex flex-col">
+
+  <canvas id="matrix-canvas"></canvas>
+  <div id="rabbit">🐇</div>
+
+  <header class="flex justify-between items-center mb-4 border-b border-green-900 pb-2">
+    <div>
+      <h1 class="text-xl font-black uppercase tracking-tighter">Zion_Data_Center <span
+          class="text-[10px] bg-green-900 text-white px-2 py-0.5">V4.0-EXTENDED</span></h1>
+      <p class="text-[9px] opacity-60 italic">> COMANDOS: [neo] [new] [smith] | NODES_STABLE: 12/12</p>
+    </div>
+    <div class="text-right cursor-pointer" onclick="triggerMeltdown()">
+      <p id="clock" class="text-3xl font-bold leading-none text-white">00:00:00</p>
+      <p class="text-[8px] uppercase tracking-widest opacity-40">System_Entropy_Monitor</p>
+    </div>
+  </header>
+
+  <main class="dashboard-grid" id="main-container">
+
+    <!-- SCR_01 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_01 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">WRITE_FLOW</h3>
+        <p class="text-[10px] opacity-70">DATA_STREAM_INJECTION</p>
+      </div>
+      <a href="http://172.16.5.230/Teste_API/WriteFlow/" target="_blank"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_02 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_02 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">SICOM</h3>
+        <p class="text-[10px] opacity-70">INTERSETORIAL_COMM</p>
+      </div>
+      <a href="http://172.16.5.230:5050/sicom/sicomp.php" target="_blank"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_03 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_03 // SYNC</span><span
+          class="text-yellow-500 italic">PENDING...</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">OM-30</h3>
+        <p class="text-[10px] opacity-70">GEO_POSITIONING</p>
+      </div>
+      <a href="http://172.16.5.230/Teste_API/OM-30/"
+        class="btn-link py-2 text-center text-[10px] font-bold opacity-30">AWAITING_UPLINK</a>
+    </div>
+
+    <!-- SCR_04 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_04 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">LEGISOFT</h3>
+        <p class="text-[10px] opacity-70">ENCRYPTED_FEEDBACK</p>
+      </div>
+      <a href="http://172.16.5.230/Teste_API/LEGISOFT/"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_05 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_05 // RESTRICTED</span><span
+          class="text-red-500 font-bold">LOCKED</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">CULTURA</h3>
+        <p class="text-[10px] opacity-70">HISTORICAL_LOG</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold opacity-30"">AWAITING_UPLINK</a>
+        </div>
+
+        <!-- SCR_06 (LOG COM CASCATA MELHORADA) -->
+        <div class=" monitor-screen p-4 border-l-4 border-l-white/20 bg-black relative overflow-hidden">
+        <canvas id="log-matrix-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+        <div class="flex justify-between text-[9px] font-bold relative z-10"><span>SCR_06 // SYS_LOG</span><span
+            class="text-white">SCANNING...</span></div>
+        <div class="relative z-10 text-[9px] mt-2 leading-tight opacity-90 uppercase font-bold pointer-events-none"
+          id="auto-log">
+          > Analysing security layer...<br>
+          > Port 443 detected...<br>
+          > Handshake sequence initiated...<br>
+        </div>
+    </div>
+
+    <!-- SCR_07 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_07 // STANDBY</span><span
+          class="text-blue-400">IDLE</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">SEI_TREINA 4</h3>
+        <p class="text-[10px] opacity-70">TRAINING_ENV_04</p>
+      </div>
+      <a href="https://seitreina.guarulhos.sp.gov.br/sei/web/" target="_blank"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_08 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_08 // ENCRYPTED</span><span
+          class="animate-pulse text-green-400">SECURE</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">SEI_TREINA 5</h3>
+        <p class="text-[10px] opacity-70">TRAINING_ENV_05</p>
+      </div>
+      <a href="https://seitreina5.guarulhos.sp.gov.br/sei/web" target="_blank"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_09 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_09 // WARNING</span><span
+          class="text-orange-500 animate-bounce">!</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">WS_PRODUÇÃO</h3>
+        <p class="text-[10px] opacity-70">HOVERCRAFT_OS</p>
+      </div>
+      <a href="https://sei.guarulhos.sp.gov.br/sei/web/sei_ws/login.php"
+        class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_10 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_10 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">GS_SEI</h3>
+        <p class="text-[10px] opacity-70">SOURCE_CODE_ROOT</p>
+      </div>
+      <a href="http://172.16.5.230:60/" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_11 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_11 // OFFLINE</span><span
+          class="text-gray-600 italic">SHADOW</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">SEI-RELATÓRIO</h3>
+        <p class="text-[10px] opacity-70">SIGNAL_DISRUPTION</p>
+      </div>
+      <a href="https://sei.guarulhos.sp.gov.br/sei/web/sei_relatorio/home.php"
+        class="btn-link py-2 text-center text-[10px] font-bold opacity-50">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_12 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_12 // DEBUG</span><span
+          class="text-purple-400">TRACE</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">PAINEL_INFOSEI</h3>
+        <p class="text-[10px] opacity-70">DOCK_CONTROL</p>
+      </div>
+      <a href="http://172.16.16.230:30/" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_13 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_13 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">PROTOCOLO_X</h3>
+        <p class="text-[10px] opacity-70">DATA_ROUTING</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_14 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_14 // SYNC</span><span
+          class="text-yellow-500 italic">PENDING...</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">NODE_ALPHA</h3>
+        <p class="text-[10px] opacity-70">SYNC_CORE</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold opacity-40">AWAITING_UPLINK</a>
+    </div>
+
+    <!-- SCR_15 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_15 // WARNING</span><span
+          class="text-orange-500 animate-bounce">!</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">CORE_AI</h3>
+        <p class="text-[10px] opacity-70">PREDICTIVE_LAYER</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_16 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_16 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">DATA_VAULT</h3>
+        <p class="text-[10px] opacity-70">ENCRYPT_STORAGE</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_17 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_17 // OFFLINE</span><span
+          class="text-gray-600 italic">SHADOW</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">BACKUP_NODE</h3>
+        <p class="text-[10px] opacity-70">FAILSAFE_UNIT</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold opacity-50">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_18 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_18 // DEBUG</span><span
+          class="text-purple-400">TRACE</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">API_GATEWAY</h3>
+        <p class="text-[10px] opacity-70">REQUEST_HANDLER</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_19 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_19 // ENCRYPTED</span><span
+          class="animate-pulse text-green-400">SECURE</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">AUTH_NODE</h3>
+        <p class="text-[10px] opacity-70">ACCESS_CONTROL</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_20 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_20 // ACTIVE</span><span
+          class="animate-pulse text-green-400">REC ●</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">SYS_MONITOR</h3>
+        <p class="text-[10px] opacity-70">REALTIME_ANALYTICS</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+    <!-- SCR_21 -->
+    <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+      <div class="flex justify-between text-[9px] font-bold"><span>SCR_21 // RESTRICTED</span><span
+          class="text-red-500 font-bold">LOCKED</span></div>
+      <div class="my-auto text-center">
+        <h3 class="text-2xl font-black text-white italic">OMEGA_CORE</h3>
+        <p class="text-[10px] opacity-70">CLASSIFIED_ZONE</p>
+      </div>
+      <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+    </div>
+
+  </main>
+
+  <footer
+    class="mt-auto py-2 text-[8px] opacity-30 flex justify-between uppercase tracking-widest bg-black sticky bottom-0 z-50">
+    <p>Zion Operating System - v4.0.26</p>
+    <p>User: Anderson // Connection: Tunneling</p>
+  </footer>
+
+  <script>
+    // 1. Matrix Rain Background (Global)
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const letters = "01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ2026";
+    const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00FF41";
+      ctx.font = "15px monospace";
+      drops.forEach((y, i) => {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * 16, y * 16);
+        if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+    setInterval(drawMatrix, 50);
+
+   // 2. Cascata Interna do Card 06 (MELHORADA)
+    const logCanvas = document.getElementById('log-matrix-canvas');
+    const lctx = logCanvas.getContext('2d');
+    let logColumns, logDrops;
+    const logFontSize = 12; // Fonte levemente maior para destacar
+
+    // Mix de letras, números, símbolos e Katakana (alfabeto japonês)
+    const logLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ";
+
+    function initLogMatrix() {
+      // Ajusta o tamanho do canvas para o contêiner pai
+      logCanvas.width = logCanvas.parentElement.offsetWidth;
+      logCanvas.height = logCanvas.parentElement.offsetHeight;
+
+      logColumns = logCanvas.width / logFontSize;
+      logDrops = [];
+
+      // Inicia as gotas em posições Y aleatórias (negativas)
+      // Isso impede que a chuva caia como um "bloco" sólido no início
+      for (let x = 0; x < logColumns; x++) {
+        logDrops[x] = Math.random() * -100;
+      }
+    }
+
+    // Inicializa e atualiza em caso de resize da tela
+    window.addEventListener('resize', initLogMatrix);
+    initLogMatrix();
+
+    function drawLogMatrix() {
+      // Fundo semi-transparente para criar o rastro escurecendo aos poucos
+      lctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+      lctx.fillRect(0, 0, logCanvas.width, logCanvas.height);
+
+      lctx.font = logFontSize + "px 'Fira Code', monospace";
+
+      for (let i = 0; i < logDrops.length; i++) {
+        // Pega um caractere aleatório da nossa string
+        const text = logLetters[Math.floor(Math.random() * logLetters.length)];
+
+        // Simula o efeito Matrix: A ponta da gota (cabeça) pisca em branco, o rastro fica verde
+        if (Math.random() > 0.9) {
+          lctx.fillStyle = "#FFFFFF"; // Brilho branco na ponta
+          lctx.shadowBlur = 5;
+          lctx.shadowColor = "#FFFFFF";
+        } else {
+          lctx.fillStyle = "#00FF41"; // Verde neon para o rastro
+          lctx.shadowBlur = 0; // Remove o blur para o rastro ficar mais nítido
+        }
+
+        // Desenha o caractere
+        const x = i * logFontSize;
+        const y = logDrops[i] * logFontSize;
+        lctx.fillText(text, x, y);
+
+        // Se a gota passou do fundo do canvas, tem uma chance aleatória de voltar pro topo
+        // A aleatoriedade evita que as gotas fiquem todas em sincronia
+        if (y > logCanvas.height && Math.random() > 0.95) {
+          logDrops[i] = 0;
+        }
+
+        // Faz a gota descer 1 "casa"
+        logDrops[i]++;
+      }
+    }
+
+    // Intervalo ligeiramente mais rápido (50ms) para dar uma sensação fluida de "Scanner"
+    setInterval(drawLogMatrix, 80);
+    setInterval(drawLogMatrix, 80);
+
+    // Intervalo ligeiramente mais rápido (50ms) para dar uma sensação fluida de "Scanner"
+      setInterval(drawLogMatrix, 180);
+    // 3. Relógio e Auto-Log
+    setInterval(() => {
+      document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR');
+      const log = document.getElementById('auto-log');
+      const msgs = ["My name IS NEO", "THERE IS NO SPOON", "WAKE UP NEO", "FOLLOW THE WHITE RABBIT", "FREE YOUR MIND", "BECAUSE I CHOOSE TO", "CAUSE AND EFFECT", "I BELIEEVE IN YOU"];
+      if (Math.random() > 0.3) log.innerHTML += `> ${msgs[Math.floor(Math.random() * msgs.length)]}<br>`;
+      if (log.innerHTML.length > 400) log.innerHTML = "> Logs Refreshed...<br>";
+    }, 1000);
+
+    // 4. Teclado (Easter Eggs)
+    let combo = "";
+    window.addEventListener('keydown', (e) => {
+      combo += e.key.toLowerCase();
+      if (combo.includes("neo")) {
+        document.querySelectorAll('.monitor-screen').forEach(m => m.classList.toggle('neon-active'));
+        combo = "";
+      }
+      if (combo.includes("new")) {
+        const r = document.getElementById('rabbit');
+        r.style.animation = "rabbitRun 4s linear forwards";
+        setTimeout(() => r.style.animation = "", 4100);
+        combo = "";
+      }
+      if (combo.includes("smith")) {
+        document.body.style.filter = "invert(1) hue-rotate(180deg)";
+        setTimeout(() => document.body.style.filter = "", 1000);
+        combo = "";
+      }
+      if (combo.length > 10) combo = "";
+    });
+
+    // 5. Meltdown
+    function triggerMeltdown() {
+      document.getElementById('main-container').classList.add('melt-effect');
+      setTimeout(() => {
+        document.body.innerHTML = "<div style='color:red; font-size:4rem; text-align:center; margin-top:20vh; font-family:monospace; text-shadow: 0 0 20px red;'>SYSTEM_CRITICAL_FAILURE<br><span style='font-size:1rem; color:white;'>CONNECTION LOST - RELOAD TO AWAKEN</span></div>";
+      }, 2000);
+    }
+  </script>
+</body>
+
+</html>
