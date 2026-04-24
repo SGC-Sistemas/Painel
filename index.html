@@ -25,7 +25,6 @@
             overflow-y: auto;
         }
 
-        /* Scrollbar Estilo Matrix */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -167,7 +166,7 @@
         <div>
             <h1 class="text-xl font-black uppercase tracking-tighter">Zion_Data_Center <span
                     class="text-[10px] bg-green-900 text-white px-2 py-0.5">V4.0-EXTENDED</span></h1>
-            <p class="text-[9px] opacity-60 italic">> COMANDOS: [neo] [new] [smith] | NODES_STABLE: 12/12</p>
+            <p class="text-[9px] opacity-60 italic">> COMANDOS: [neo] [new] [smith] | NODES_STABLE: 21/21</p>
         </div>
         <div class="text-right cursor-pointer" onclick="triggerMeltdown()">
             <p id="clock" class="text-3xl font-bold leading-none text-white">00:00:00</p>
@@ -209,7 +208,7 @@
                 <h3 class="text-2xl font-black text-white italic">SICOM_PRODUÇÃO</h3>
                 <p class="text-[10px] ">GEO_POSITIONING</p>
             </div>
-            <a href=http://172.16.5.230/Teste_API/SICOM/SICOMP.PHP target="_blank"
+            <a href="http://172.16.5.230/Teste_API/SICOM/SICOMP.PHP" target="_blank"
                 class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
         </div>
 
@@ -221,7 +220,7 @@
                 <h3 class="text-2xl font-black text-white italic">LEGISOFT</h3>
                 <p class="text-[10px] opacity-70">ENCRYPTED_FEEDBACK</p>
             </div>
-            <a href="http://172.16.5.230/Teste_API/LEGISOFT/"
+            <a href="http://172.16.5.230/Teste_API/LEGISOFT/" target="_blank"
                 class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
         </div>
 
@@ -236,7 +235,7 @@
             <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
         </div>
 
-        <!-- SCR_06 (LOG COM CASCATA MELHORADA) -->
+        <!-- SCR_06 -->
         <div class="monitor-screen p-4 border-l-4 border-l-white/20 bg-black relative overflow-hidden">
             <canvas id="log-matrix-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
             <div class="flex justify-between text-[9px] font-bold relative z-10"><span>SCR_06 // SYS_LOG</span><span
@@ -293,7 +292,8 @@
                 <h3 class="text-2xl font-black text-white italic">RELATÓRIO_SEI</h3>
                 <p class="text-[10px] opacity-70">SOURCE_CODE_ROOT</p>
             </div>
-            <a href="https://sei.guarulhos.sp.gov.br/sei/web/sei_relatorio/login.php" class="btn-link py-2 text-center text-[10px] font-bold">ACCESS_MAIN_FRAME</a>
+            <a href="https://sei.guarulhos.sp.gov.br/sei/web/sei_relatorio/login.php" target="_blank"
+                class="btn-link py-2 text-center text-[10px] font-bold">ACCESS_MAIN_FRAME</a>
         </div>
 
         <!-- SCR_11 -->
@@ -318,6 +318,105 @@
             <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">MANUAL_OVERRIDE</a>
         </div>
 
+        <!-- SCR_13 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_13 // ACTIVE</span><span
+                    class="animate-pulse text-green-400">REC ●</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">PROTOCOLO</h3>
+                <p class="text-[10px] opacity-70">REQUEST_GATEWAY</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+        </div>
+
+        <!-- SCR_14 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_14 // SYNC</span><span
+                    class="text-yellow-500 italic">PENDING...</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">ARQUIVO_GERAL</h3>
+                <p class="text-[10px] opacity-70">DOCUMENT_VAULT</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+        </div>
+
+        <!-- SCR_15 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_15 // ACTIVE</span><span
+                    class="animate-pulse text-green-400">SECURE</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">PAINEL_SIG</h3>
+                <p class="text-[10px] opacity-70">INTELLIGENCE_GRID</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">ACCESS_MAIN_FRAME</a>
+        </div>
+
+        <!-- SCR_16 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_16 // MONITOR</span><span
+                    class="text-blue-400">WATCH</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">DASHBOARD_SEI</h3>
+                <p class="text-[10px] opacity-70">PROCESS_TRACKING</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+        </div>
+
+        <!-- SCR_17 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_17 // WARNING</span><span
+                    class="text-orange-500 animate-bounce">!</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">ALERTA_NOC</h3>
+                <p class="text-[10px] opacity-70">NETWORK_SENTINEL</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">OPEN_CHANNEL</a>
+        </div>
+
+        <!-- SCR_18 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_18 // RESTRICTED</span><span
+                    class="text-red-500 font-bold">LOCKED</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">ADMIN_ROOT</h3>
+                <p class="text-[10px] opacity-70">PRIVILEGE_ESCALATION</p>
+            </div>
+            <a href="#" class="btn-link py-2 text-center text-[10px] font-bold opacity-50">REQUEST_TOKEN</a>
+        </div>
+
+        <!-- SCR_19 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_19 // STANDBY</span><span
+                    class="text-blue-400">IDLE</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">BASE_LEGAL</h3>
+                <p class="text-[10px] opacity-70">LAW_INDEX_SEARCH</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+        </div>
+
+        <!-- SCR_20 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_20 // DEBUG</span><span
+                    class="text-purple-400">TRACE</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">API_BRIDGE</h3>
+                <p class="text-[10px] opacity-70">ENDPOINT_MAPPING</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">MANUAL_OVERRIDE</a>
+        </div>
+
+        <!-- SCR_21 -->
+        <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <div class="flex justify-between text-[9px] font-bold"><span>SCR_21 // ONLINE</span><span
+                    class="animate-pulse text-green-400">LIVE</span></div>
+            <div class="my-auto text-center">
+                <h3 class="text-2xl font-black text-white italic">ZION_BACKUP</h3>
+                <p class="text-[10px] opacity-70">FAILSAFE_NODE</p>
+            </div>
+            <a href="#" target="_blank" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+        </div>
+
     </main>
 
     <footer
@@ -327,13 +426,13 @@
     </footer>
 
     <script>
-        // 1. Matrix Rain Background (Global)
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const letters = "01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ2026";
         const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+
         function drawMatrix() {
             ctx.fillStyle = "rgba(0,0,0,0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -348,19 +447,27 @@
         }
         setInterval(drawMatrix, 50);
 
-        // 2. Cascata Interna do Card 06
         const logCanvas = document.getElementById('log-matrix-canvas');
         const lctx = logCanvas.getContext('2d');
+
         function resizeLogCanvas() {
             logCanvas.width = logCanvas.parentElement.offsetWidth;
             logCanvas.height = logCanvas.parentElement.offsetHeight;
         }
         window.addEventListener('resize', resizeLogCanvas);
         resizeLogCanvas();
+
         const logLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const logFontSize = 10;
-        const logColumns = logCanvas.width / logFontSize;
-        const logDrops = Array(Math.floor(logColumns)).fill(1);
+        let logDrops = [];
+
+        function resetLogDrops() {
+            const logColumns = Math.floor(logCanvas.width / logFontSize);
+            logDrops = Array(logColumns).fill(1);
+        }
+        resetLogDrops();
+        window.addEventListener('resize', resetLogDrops);
+
         function drawLogMatrix() {
             lctx.fillStyle = "rgba(0, 0, 0, 0.1)";
             lctx.fillRect(0, 0, logCanvas.width, logCanvas.height);
@@ -375,7 +482,11 @@
         }
         setInterval(drawLogMatrix, 60);
 
-        // 3. Relógio e Auto-Log
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
         setInterval(() => {
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR');
             const log = document.getElementById('auto-log');
@@ -384,7 +495,6 @@
             if (log.innerHTML.length > 400) log.innerHTML = "> Logs Refreshed...<br>";
         }, 1000);
 
-        // 4. Teclado (Easter Eggs)
         let combo = "";
         window.addEventListener('keydown', (e) => {
             combo += e.key.toLowerCase();
@@ -406,7 +516,6 @@
             if (combo.length > 10) combo = "";
         });
 
-        // 5. Meltdown
         function triggerMeltdown() {
             document.getElementById('main-container').classList.add('melt-effect');
             setTimeout(() => {
