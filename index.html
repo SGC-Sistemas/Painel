@@ -1,88 +1,234 @@
 <!DOCTYPE html>
+<!--
+    Este arquivo é uma página HTML completa.
+    HTML é a estrutura da página, CSS é a aparência e JavaScript é a parte interativa.
+-->
 <html lang="pt-br">
+<!--
+    lang="pt-br" informa ao navegador que o idioma principal da página é português do Brasil.
+-->
 
 <head>
+    <!--
+        A tag <head> guarda informações da página que normalmente não aparecem diretamente na tela,
+        como título, configurações, fontes, bibliotecas e estilos.
+    -->
+
     <meta charset="UTF-8">
+    <!--
+        Define o padrão de caracteres como UTF-8.
+        Isso permite usar acentos, cedilha e símbolos sem quebrar o texto.
+    -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+        Faz a página se adaptar melhor a celulares, tablets e telas menores.
+        Sem isso, o layout pode ficar muito pequeno ou desajustado no celular.
+    -->
+
     <title>ZION_COMMAND_CENTER_V4_EXTENDED</title>
+    <!--
+        Define o nome que aparece na aba do navegador.
+    -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <!--
+        Importa o Tailwind CSS.
+        Tailwind é uma biblioteca que permite usar classes prontas no HTML,
+        por exemplo: p-4, text-center, flex, border-b, etc.
+    -->
+
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&display=swap" rel="stylesheet">
+    <!--
+        Importa a fonte Fira Code do Google Fonts.
+        Essa fonte tem aparência de terminal/código, combinando com o tema Matrix.
+    -->
+
     <style>
+        /*
+            A tag <style> contém o CSS escrito diretamente dentro do HTML.
+            CSS controla cores, tamanhos, sombras, posições, animações e aparência geral.
+        */
+
         :root {
+            /*
+                :root funciona como uma área global de variáveis CSS.
+                Variáveis ajudam a reaproveitar cores e valores em vários pontos do código.
+            */
+
             --m-green: #00FF41;
+            /* Verde principal do painel, usado em textos, bordas e brilhos. */
+
             --m-dark: #001a00;
+            /* Verde escuro auxiliar. */
+
             --neon-glow: 0 0 15px rgba(0, 255, 65, 0.4);
+            /* Sombra neon verde. Foi criada como variável para reaproveitamento. */
         }
 
         body,
         html {
+            /*
+                Aplica regras tanto ao <html> quanto ao <body>.
+                O html é a página inteira; o body é o conteúdo visível.
+            */
+
             margin: 0;
+            /* Remove a margem padrão do navegador. */
+
             padding: 0;
+            /* Remove o espaçamento interno padrão. */
+
             background-color: #000;
+            /* Fundo preto. */
+
             color: var(--m-green);
+            /* Cor padrão dos textos: verde Matrix. */
+
             font-family: 'Fira Code', monospace;
+            /* Usa a fonte Fira Code; se falhar, usa uma fonte monoespaçada. */
+
             overflow-x: hidden;
+            /* Esconde rolagem horizontal, evitando barra lateral desnecessária. */
+
             overflow-y: auto;
+            /* Permite rolagem vertical quando houver muito conteúdo. */
         }
 
         ::-webkit-scrollbar {
+            /* Personaliza a largura da barra de rolagem em navegadores baseados em WebKit/Chromium. */
             width: 6px;
         }
 
         ::-webkit-scrollbar-track {
+            /* Fundo da barra de rolagem. */
             background: #000;
         }
 
         ::-webkit-scrollbar-thumb {
+            /* Parte móvel da barra de rolagem. */
             background: #003300;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
+            /* Quando passa o mouse na barra de rolagem, ela fica verde mais forte. */
             background: var(--m-green);
         }
 
         #matrix-canvas {
+            /*
+                Este canvas é a tela onde o efeito Matrix de fundo será desenhado via JavaScript.
+            */
+
             position: fixed;
+            /* Fixa o canvas na tela, mesmo quando a página rola. */
+
             top: 0;
             left: 0;
+            /* Coloca o canvas no canto superior esquerdo. */
+
             z-index: -1;
+            /* Coloca o canvas atrás de todo o conteúdo. */
+
             opacity: 0.15;
+            /* Deixa o efeito bem transparente para não atrapalhar os cards. */
         }
 
         .monitor-screen {
+            /*
+                Esta é a classe principal dos cards/monitores do painel.
+                Cada bloco SCR_01, SCR_02 etc usa essa aparência.
+            */
+
             background: radial-gradient(circle, rgba(0, 40, 0, 0.2) 0%, rgba(0, 0, 0, 1) 100%);
+            /* Fundo escuro com leve brilho verde no centro. */
+
             border: 2px solid #111;
+            /* Borda escura ao redor do card. */
+
             border-top: 2px solid #333;
+            /* Borda superior um pouco mais clara para dar sensação de profundidade. */
+
             box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.1), 0 5px 15px rgba(0, 0, 0, 0.5);
+            /*
+                Duas sombras:
+                1. inset: brilho interno verde.
+                2. sombra externa preta: dá profundidade ao card.
+            */
+
             position: relative;
+            /* Necessário para permitir efeitos internos posicionados com ::before. */
+
             display: flex;
+            /* Transforma o card em um contêiner flexível. */
+
             flex-direction: column;
+            /* Organiza os elementos do card em coluna: topo, meio e botão. */
+
             justify-content: space-between;
+            /* Distribui o conteúdo do card com espaço entre partes. */
+
             min-height: 220px;
+            /* Altura mínima de cada card. */
         }
 
         .monitor-screen::before {
+            /*
+                ::before cria uma camada visual dentro do card sem precisar adicionar HTML extra.
+                Aqui ele cria um efeito de tela/monitor antigo, com linhas suaves.
+            */
+
             content: " ";
+            /* Necessário para o ::before aparecer. */
+
             position: absolute;
             top: 0;
             left: 0;
             bottom: 0;
             right: 0;
+            /* Faz a camada cobrir o card inteiro. */
+
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
                 linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            /*
+                Cria duas camadas:
+                1. Linhas horizontais tipo monitor CRT.
+                2. Pequena variação RGB, simulando tela antiga.
+            */
+
             background-size: 100% 3px, 3px 100%;
+            /* Define o tamanho das linhas do efeito. */
+
             z-index: 5;
+            /* Fica acima do fundo do card. */
+
             pointer-events: none;
+            /* Permite clicar nos botões normalmente, como se essa camada não existisse. */
         }
 
         .neon-active {
+            /*
+                Classe ativada quando o usuário digita "neo".
+                Ela deixa os cards com borda e brilho neon mais fortes.
+            */
+
             border: 2px solid #fff !important;
+            /* Borda branca forte. O !important força essa borda a vencer outras regras. */
+
             box-shadow: 0 0 20px #00FF41, inset 0 0 10px #00FF41 !important;
+            /* Brilho verde externo e interno. */
+
             animation: borderRotate 1s infinite alternate;
+            /* Aplica uma animação contínua alternando cores. */
         }
 
         @keyframes borderRotate {
+            /*
+                Define a animação usada pelo modo neon.
+                Ela altera o filtro de cor com hue-rotate.
+            */
+
             from {
                 filter: hue-rotate(0deg);
             }
@@ -93,15 +239,29 @@
         }
 
         #rabbit {
+            /*
+                Emoji do coelho usado como easter egg.
+                Ele aparece quando o usuário digita "new".
+            */
+
             position: fixed;
             bottom: 20px;
             left: -100px;
+            /* Começa fora da tela, à esquerda. */
+
             font-size: 3rem;
             z-index: 1000;
+            /* Fica acima de praticamente tudo. */
+
             pointer-events: none;
+            /* O usuário não interage com o coelho. */
         }
 
         @keyframes rabbitRun {
+            /*
+                Animação que faz o coelho atravessar a tela da esquerda para a direita.
+            */
+
             0% {
                 left: -100px;
             }
@@ -112,43 +272,90 @@
         }
 
         .dashboard-grid {
+            /*
+                Área que organiza todos os cards em grade.
+            */
+
             display: grid;
+            /* Usa CSS Grid para montar colunas e linhas automaticamente. */
+
             grid-template-columns: repeat(3, 1fr);
+            /* Cria 3 colunas com tamanhos iguais em telas grandes. */
+
             gap: 15px;
+            /* Espaço entre os cards. */
+
             padding-bottom: 60px;
+            /* Espaço no final para o rodapé não cobrir os cards. */
         }
 
         @media (max-width: 1024px) {
+            /*
+                Regra responsiva: quando a tela tiver até 1024px,
+                a grade muda para 2 colunas.
+            */
+
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 640px) {
+            /*
+                Regra responsiva para celular:
+                os cards ficam em apenas 1 coluna.
+            */
+
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         .btn-link {
+            /*
+                Aparência dos botões/links dentro dos cards.
+            */
+
             border: 1px solid var(--m-green);
+            /* Borda verde. */
+
             background: rgba(0, 255, 65, 0.05);
+            /* Fundo verde bem transparente. */
+
             transition: 0.3s;
+            /* Suaviza mudanças quando passa o mouse. */
+
             text-shadow: 0 0 5px var(--m-green);
+            /* Brilho leve no texto. */
+
             z-index: 10;
+            /* Fica acima do efeito ::before do card. */
         }
 
         .btn-link:hover {
+            /*
+                Aparência do botão quando o mouse passa por cima.
+            */
+
             background: var(--m-green);
             color: #000;
             box-shadow: 0 0 20px var(--m-green);
         }
 
         .melt-effect {
+            /*
+                Classe aplicada ao container principal quando o usuário clica no relógio.
+                Ela ativa a animação de "derretimento"/queda.
+            */
+
             animation: melt 2s forwards;
         }
 
         @keyframes melt {
+            /*
+                Animação que joga o painel para baixo, gira um pouco e some.
+            */
+
             to {
                 transform: translateY(100vh) rotate(10deg);
                 opacity: 0;
@@ -158,34 +365,118 @@
 </head>
 
 <body class="p-4 flex flex-col">
+    <!--
+        <body> é tudo que aparece visualmente na página.
+
+        Classes Tailwind usadas aqui:
+        p-4: adiciona espaçamento interno.
+        flex: usa layout flexível.
+        flex-col: organiza os elementos em coluna.
+    -->
 
     <canvas id="matrix-canvas"></canvas>
+    <!--
+        Canvas do efeito Matrix principal.
+        O JavaScript desenha letras/números nele o tempo todo.
+    -->
+
     <div id="rabbit">🐇</div>
+    <!--
+        Coelho escondido inicialmente fora da tela.
+        Ele corre pela tela quando o usuário digita "new".
+    -->
 
     <header class="flex justify-between items-center mb-4 border-b border-green-900 pb-2">
+        <!--
+            Cabeçalho superior do painel.
+
+            Classes Tailwind:
+            flex: deixa os blocos lado a lado.
+            justify-between: separa título à esquerda e relógio à direita.
+            items-center: alinha verticalmente ao centro.
+            mb-4: margem abaixo.
+            border-b: borda inferior.
+            border-green-900: cor verde escura da borda.
+            pb-2: espaçamento interno inferior.
+        -->
+
         <div>
+            <!-- Bloco esquerdo do cabeçalho: nome do sistema e comandos. -->
+
             <h1 class="text-xl font-black uppercase tracking-tighter">Zion_Data_Center <span
                     class="text-[10px] bg-green-900 text-white px-2 py-0.5">V4.0-EXTENDED</span></h1>
-            <p class="text-[9px] opacity-60 italic">> COMANDOS: [neo] [new] [smith] | NODES_STABLE: 21/21</p>
+            <!--
+                Título principal.
+                O <span> é uma etiqueta pequena com a versão do sistema.
+            -->
+
+            <p class="text-[9px] opacity-60 italic">&gt; COMANDOS: [neo] [new] [smith] | NODES_STABLE: 21/21</p>
+            <!--
+                Linha informativa mostrando comandos secretos/easter eggs.
+                &gt; representa o símbolo > em HTML.
+            -->
         </div>
+
         <div class="text-right cursor-pointer" onclick="triggerMeltdown()">
+            <!--
+                Bloco direito do cabeçalho: relógio.
+                text-right: alinha texto à direita.
+                cursor-pointer: muda o cursor para indicar que é clicável.
+                onclick="triggerMeltdown()": chama uma função JavaScript ao clicar.
+            -->
+
             <p id="clock" class="text-3xl font-bold leading-none text-white">00:00:00</p>
+            <!--
+                Relógio do painel.
+                O JavaScript atualiza esse texto a cada segundo.
+            -->
+
             <p class="text-[8px] uppercase tracking-widest opacity-40">System_Entropy_Monitor</p>
+            <!-- Texto pequeno abaixo do relógio. -->
         </div>
     </header>
 
     <main class="dashboard-grid" id="main-container">
+        <!--
+            Área principal do painel.
+            Aqui ficam todos os cards/monitores.
+            id="main-container" é usado pelo JavaScript no efeito de derretimento.
+        -->
+
+        <!--
+            Cada bloco abaixo segue praticamente o mesmo padrão:
+            1. Um comentário indicando o número do card.
+            2. Uma div com classe monitor-screen, que cria o visual do monitor.
+            3. Um topo com código/status.
+            4. Um centro com nome e descrição.
+            5. Um link/botão de acesso.
+        -->
 
         <!-- SCR_01 -->
         <div class="monitor-screen p-4 border-l-4 border-l-green-800">
+            <!-- Card do sistema WRITE_FLOW. -->
+
             <div class="flex justify-between text-[9px] font-bold"><span>SCR_01 // ACTIVE</span><span
                     class="animate-pulse text-green-400">REC ●</span></div>
+            <!--
+                Topo do card.
+                À esquerda: identificação e status.
+                À direita: REC com animação pulsante.
+            -->
+
             <div class="my-auto text-center">
+                <!-- Parte central do card. -->
                 <h3 class="text-2xl font-black text-white italic">WRITE_FLOW</h3>
                 <p class="text-[10px] opacity-70">DATA_STREAM_INJECTION</p>
             </div>
+
             <a href="http://172.16.5.230/Teste_API/WriteFlow/" target="_blank"
                 class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+            <!--
+                Botão/link do card.
+                href: endereço aberto ao clicar.
+                target="_blank": abre em nova aba.
+            -->
         </div>
 
         <!-- SCR_02 -->
@@ -204,6 +495,7 @@
         <div class="monitor-screen p-4 border-l-4 border-l-green-800">
             <div class="flex justify-between text-[9px] font-bold"><span>SCR_03 // SYNC</span><span
                     class="text-yellow-500 italic">PENDING...</span></div>
+            <!-- Status amarelo indica pendência/sincronização. -->
             <div class="my-auto text-center">
                 <h3 class="text-2xl font-black text-white italic">SICOM_PRODUÇÃO</h3>
                 <p class="text-[10px] ">GEO_POSITIONING</p>
@@ -228,25 +520,44 @@
         <div class="monitor-screen p-4 border-l-4 border-l-green-800">
             <div class="flex justify-between text-[9px] font-bold"><span>SCR_05 // RESTRICTED</span><span
                     class="text-red-500 font-bold">LOCKED</span></div>
+            <!-- Status vermelho indica bloqueado/restrito. -->
             <div class="my-auto text-center">
                 <h3 class="text-2xl font-black text-white italic">CULTURA</h3>
                 <p class="text-[10px] opacity-70">HISTORICAL_LOG</p>
             </div>
             <a href="#" class="btn-link py-2 text-center text-[10px] font-bold">CONECTED_MODE</a>
+            <!-- href="#" significa que ainda não há endereço real configurado. -->
         </div>
 
         <!-- SCR_06 -->
         <div class="monitor-screen p-4 border-l-4 border-l-white/20 bg-black relative overflow-hidden">
+            <!--
+                Este card é diferente: ele tem um mini efeito Matrix próprio dentro dele.
+                relative e overflow-hidden ajudam o canvas interno ficar preso dentro do card.
+            -->
+
             <canvas id="log-matrix-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+            <!-- Canvas interno do card de logs. -->
+
             <div class="flex justify-between text-[9px] font-bold relative z-10"><span>SCR_06 // SYS_LOG</span><span
                     class="text-white">SCANNING...</span></div>
+            <!-- z-10 deixa o texto acima do canvas interno. -->
+
             <div class="relative z-10 text-[9px] mt-2 leading-tight opacity-90 uppercase font-bold pointer-events-none"
                 id="auto-log">
-                > Analysing security layer...<br>
-                > Port 443 detected...<br>
-                > Handshake sequence initiated...<br>
+                <!--
+                    Área onde o JavaScript adiciona mensagens de log automaticamente.
+                -->
+                &gt; Analysing security layer...<br>
+                &gt; Port 443 detected...<br>
+                &gt; Handshake sequence initiated...<br>
             </div>
         </div>
+
+        <!--
+            A partir daqui, os cards seguem o mesmo modelo dos anteriores.
+            Eles mudam basicamente nome, descrição, status e link.
+        -->
 
         <!-- SCR_07 -->
         <div class="monitor-screen p-4 border-l-4 border-l-green-800">
@@ -421,104 +732,336 @@
 
     <footer
         class="mt-auto py-2 text-[8px] opacity-30 flex justify-between uppercase tracking-widest bg-black sticky bottom-0 z-50">
+        <!--
+            Rodapé fixo na parte de baixo.
+
+            sticky bottom-0: tenta manter o rodapé preso no fim da tela ao rolar.
+            z-50: deixa acima de outros elementos.
+        -->
         <p>Zion Operating System - v4.0.26</p>
         <p>User: Anderson // Connection: Tunneling</p>
     </footer>
 
     <script>
+        /*
+            A tag <script> contém JavaScript.
+            JavaScript adiciona comportamento e animações à página.
+        */
+
+        /* =========================
+           EFEITO MATRIX PRINCIPAL
+        ========================= */
+
         const canvas = document.getElementById('matrix-canvas');
+        /*
+            Pega o elemento <canvas id="matrix-canvas"> do HTML.
+            Ele será usado como uma tela de desenho.
+        */
+
         const ctx = canvas.getContext('2d');
+        /*
+            getContext('2d') permite desenhar formas, textos e efeitos em 2D no canvas.
+        */
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        /*
+            Faz o canvas ocupar a largura e altura total da janela do navegador.
+        */
+
         const letters = "01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ2026";
+        /*
+            Lista de caracteres que aparecem caindo no fundo.
+            Mistura números e símbolos japoneses para lembrar o visual Matrix.
+        */
+
         const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+        /*
+            Cria uma lista de posições verticais.
+            Cada item representa uma coluna de caracteres caindo.
+            canvas.width / 16 calcula quantas colunas cabem na tela.
+        */
 
         function drawMatrix() {
+            /*
+                Função que desenha um novo quadro do efeito Matrix.
+                Ela é chamada várias vezes por segundo.
+            */
+
             ctx.fillStyle = "rgba(0,0,0,0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            /*
+                Desenha um retângulo preto transparente sobre a tela.
+                Isso cria o efeito de rastro/fade dos caracteres antigos.
+            */
+
             ctx.fillStyle = "#00FF41";
             ctx.font = "15px monospace";
+            /*
+                Define cor e fonte dos caracteres desenhados.
+            */
+
             drops.forEach((y, i) => {
+                /*
+                    Percorre cada coluna da chuva Matrix.
+                    y é a posição vertical atual.
+                    i é o número da coluna.
+                */
+
                 const text = letters[Math.floor(Math.random() * letters.length)];
+                /* Escolhe um caractere aleatório da lista letters. */
+
                 ctx.fillText(text, i * 16, y * 16);
+                /*
+                    Desenha o caractere no canvas.
+                    i * 16 define a posição horizontal.
+                    y * 16 define a posição vertical.
+                */
+
                 if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                /*
+                    Se a coluna passou do final da tela,
+                    às vezes ela volta para o topo.
+                    O Math.random evita que todas voltem ao mesmo tempo.
+                */
+
                 drops[i]++;
+                /* Move a coluna para baixo no próximo quadro. */
             });
         }
+
         setInterval(drawMatrix, 50);
+        /*
+            Chama drawMatrix a cada 50 milissegundos.
+            Isso cria a animação contínua.
+        */
+
+        /* =========================
+           EFEITO MATRIX DO CARD DE LOGS
+        ========================= */
 
         const logCanvas = document.getElementById('log-matrix-canvas');
         const lctx = logCanvas.getContext('2d');
+        /*
+            Pega o canvas interno do card SCR_06 e prepara para desenhar nele.
+        */
 
         function resizeLogCanvas() {
+            /*
+                Ajusta o tamanho do canvas interno para ficar igual ao tamanho do card.
+            */
             logCanvas.width = logCanvas.parentElement.offsetWidth;
             logCanvas.height = logCanvas.parentElement.offsetHeight;
         }
+
         window.addEventListener('resize', resizeLogCanvas);
+        /*
+            Quando a janela muda de tamanho, ajusta o canvas interno também.
+        */
+
         resizeLogCanvas();
+        /* Chama a função uma vez ao carregar a página. */
 
         const logLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        /* Caracteres usados no efeito Matrix pequeno do card de logs. */
+
         const logFontSize = 10;
+        /* Tamanho da fonte no canvas interno. */
+
         let logDrops = [];
+        /* Lista que guarda a posição de queda de cada coluna do canvas interno. */
 
         function resetLogDrops() {
+            /*
+                Recalcula quantas colunas cabem no card de logs.
+            */
             const logColumns = Math.floor(logCanvas.width / logFontSize);
             logDrops = Array(logColumns).fill(1);
         }
+
         resetLogDrops();
         window.addEventListener('resize', resetLogDrops);
+        /*
+            Recalcula as colunas ao carregar e quando a tela muda de tamanho.
+        */
 
         function drawLogMatrix() {
+            /*
+                Desenha a animação Matrix dentro do card SCR_06.
+            */
+
             lctx.fillStyle = "rgba(0, 0, 0, 0.1)";
             lctx.fillRect(0, 0, logCanvas.width, logCanvas.height);
+            /* Cria o rastro escuro dentro do card. */
+
             lctx.fillStyle = "#00FF41";
             lctx.font = logFontSize + "px monospace";
+            /* Define cor e fonte. */
+
             for (let i = 0; i < logDrops.length; i++) {
+                /* Percorre cada coluna do canvas interno. */
+
                 const text = logLetters[Math.floor(Math.random() * logLetters.length)];
+                /* Escolhe um caractere aleatório. */
+
                 lctx.fillText(text, i * logFontSize, logDrops[i] * logFontSize);
+                /* Desenha o caractere na posição calculada. */
+
                 if (logDrops[i] * logFontSize > logCanvas.height && Math.random() > 0.95) logDrops[i] = 0;
+                /* Reinicia a coluna quando ela passa do final do card. */
+
                 logDrops[i]++;
+                /* Move a coluna para baixo. */
             }
         }
+
         setInterval(drawLogMatrix, 60);
+        /* Roda a animação do log a cada 60 milissegundos. */
 
         window.addEventListener('resize', () => {
+            /*
+                Quando o navegador muda de tamanho,
+                o canvas principal também se adapta à nova largura e altura.
+            */
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
 
+        /* =========================
+           RELÓGIO E LOGS AUTOMÁTICOS
+        ========================= */
+
         setInterval(() => {
+            /*
+                Este bloco roda a cada 1 segundo.
+                Ele atualiza o relógio e adiciona mensagens no log.
+            */
+
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR');
+            /*
+                Pega a hora atual do computador e mostra no formato brasileiro.
+            */
+
             const log = document.getElementById('auto-log');
+            /* Pega a área de texto do card SCR_06. */
+
             const msgs = ["Handshake OK", "Bypassing Firewall...", "Node 0x88 Found", "Data Leak Detected", "Zion Synced", "Shields 98%", "Uplink Established", "Proxy Rotated"];
-            if (Math.random() > 0.7) log.innerHTML += `> ${msgs[Math.floor(Math.random() * msgs.length)]}<br>`;
-            if (log.innerHTML.length > 400) log.innerHTML = "> Logs Refreshed...<br>";
+            /* Lista de mensagens falsas/simuladas para dar efeito de sistema em operação. */
+
+            if (Math.random() > 0.7) log.innerHTML += `&gt; ${msgs[Math.floor(Math.random() * msgs.length)]}<br>`;
+            /*
+                Com certa chance, adiciona uma nova mensagem aleatória ao log.
+                &gt; representa o caractere >.
+                <br> pula linha.
+            */
+
+            if (log.innerHTML.length > 400) log.innerHTML = "&gt; Logs Refreshed...<br>";
+            /*
+                Se o log ficar grande demais, ele é limpo para não crescer infinitamente.
+            */
         }, 1000);
 
+        /* =========================
+           COMANDOS SECRETOS DO TECLADO
+        ========================= */
+
         let combo = "";
+        /*
+            Guarda as teclas digitadas em sequência.
+            Assim o sistema consegue detectar palavras como neo, new e smith.
+        */
+
         window.addEventListener('keydown', (e) => {
+            /*
+                Escuta toda tecla pressionada na página.
+                e representa o evento da tecla.
+            */
+
             combo += e.key.toLowerCase();
+            /*
+                Adiciona a tecla digitada à variável combo.
+                toLowerCase transforma em minúscula para facilitar a comparação.
+            */
+
             if (combo.includes("neo")) {
+                /*
+                    Se o usuário digitou "neo",
+                    ativa/desativa o brilho neon em todos os cards.
+                */
+
                 document.querySelectorAll('.monitor-screen').forEach(m => m.classList.toggle('neon-active'));
+                /*
+                    querySelectorAll pega todos os cards.
+                    classList.toggle adiciona a classe se não tiver, remove se já tiver.
+                */
+
                 combo = "";
+                /* Limpa o combo depois de executar o comando. */
             }
+
             if (combo.includes("new")) {
+                /*
+                    Se o usuário digitar "new",
+                    o coelho atravessa a tela.
+                */
+
                 const r = document.getElementById('rabbit');
                 r.style.animation = "rabbitRun 4s linear forwards";
+                /* Aplica a animação rabbitRun por 4 segundos. */
+
                 setTimeout(() => r.style.animation = "", 4100);
+                /*
+                    Depois de 4,1 segundos, remove a animação
+                    para permitir executar novamente depois.
+                */
+
                 combo = "";
             }
+
             if (combo.includes("smith")) {
+                /*
+                    Se o usuário digitar "smith",
+                    a tela fica com filtro invertido por 1 segundo.
+                */
+
                 document.body.style.filter = "invert(1) hue-rotate(180deg)";
+                /* Inverte as cores e gira o tom das cores. */
+
                 setTimeout(() => document.body.style.filter = "", 1000);
+                /* Remove o filtro depois de 1 segundo. */
+
                 combo = "";
             }
+
             if (combo.length > 10) combo = "";
+            /*
+                Se o usuário digitar muitas letras sem formar comando,
+                limpa o combo para evitar ficar gigante.
+            */
         });
 
+        /* =========================
+           EFEITO DE FALHA CRÍTICA
+        ========================= */
+
         function triggerMeltdown() {
+            /*
+                Esta função roda quando o usuário clica no relógio.
+                Ela simula uma falha crítica do sistema.
+            */
+
             document.getElementById('main-container').classList.add('melt-effect');
+            /*
+                Adiciona a classe melt-effect ao painel principal.
+                Essa classe ativa a animação de queda/derretimento.
+            */
+
             setTimeout(() => {
+                /*
+                    Aguarda 2 segundos para a animação acontecer,
+                    depois substitui todo o conteúdo da página pela mensagem de erro.
+                */
+
                 document.body.innerHTML = "<div style='color:red; font-size:4rem; text-align:center; margin-top:20vh; font-family:monospace; text-shadow: 0 0 20px red;'>SYSTEM_CRITICAL_FAILURE<br><span style='font-size:1rem; color:white;'>CONNECTION LOST - RELOAD TO AWAKEN</span></div>";
             }, 2000);
         }
