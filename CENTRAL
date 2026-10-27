@@ -410,7 +410,7 @@ class="text-[10px] bg-green-900 text-white px-2 py-0.5">V4.0-EXTENDED</span></h1
                O <span> é uma etiqueta pequena com a versão do sistema.
            -->
 
-<p class="text-[9px] opacity-60 italic">&gt; COMANDOS: [neo] [new] [smith] | NODES_STABLE: 21/21</p>
+<p class="text-[9px] opacity-60 italic">&gt; COMANDOS: [neo] [new] [smith] | NODES_STABLE: 30/30</p>
 <!--
                Linha informativa mostrando comandos secretos/easter eggs.
                &gt; representa o símbolo > em HTML.
